@@ -22,3 +22,14 @@ Mystry Message is a platform that allows users to send messages anonymously to o
    ```bash
    git clone https://github.com/yourusername/mystry-message.git
    cd mystry-message
+
+2. Install dependencies:
+    Copy code
+   ```bash
+   npm install
+    ```
+   OR
+   
+   ```bash
+   yarn install
+   ```
