@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/options";
 import { User } from "next-auth";
 import mongoose from "mongoose";
+import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
 	await dbConnection();
@@ -13,7 +14,7 @@ export async function GET(request: Request) {
 	const user: User = session?.user as User;
 
 	if (!session || !session.user) {
-		return Response.json(
+		return NextResponse.json(
 			{
 				success: false,
 				message: "Not Authenticated",
@@ -25,33 +26,33 @@ export async function GET(request: Request) {
 	const userId = new mongoose.Types.ObjectId(user._id);
 
 	try {
-		const user = await UserModel.aggregate([
-			{ $match: { id: userId } },
+		const userMessages = await UserModel.aggregate([
+			{ $match: { _id: userId } },
 			{ $unwind: "$messages" },
 			{ $sort: { "messages.createdAt": -1 } },
 			{ $group: { _id: "$_id", messages: { $push: "$messages" } } },
 		]);
 
-    if(!user) {
-      return Response.json(
+    if(!userMessages || userMessages.length === 0) {
+      return NextResponse.json(
         {
           success: false,
-          message: "User not found",
+          message: "User not found or has no messages",
         },
         { status: 401 }
       );
     }
 
-    return Response.json(
+    return NextResponse.json(
       {
         success: true,
-        messages: user[0].messages,
+        messages: userMessages[0].messages,
       },
       { status: 200 }
     );
 	} catch (error) {
 		console.log("An unexpected error occured ", error)
-		return Response.json(
+		return NextResponse.json(
 			{
 				success: false,
 				message: "Unexpected error occured",
