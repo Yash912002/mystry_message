@@ -19,7 +19,7 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 
-function page() {
+export default function SignInForm() {
 	const { toast } = useToast();
 	const router = useRouter();
 
@@ -105,5 +105,3 @@ function page() {
 		</div>
 	);
 }
-
-export default page;

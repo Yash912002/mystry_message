@@ -10,7 +10,7 @@ import { useDebounceCallback } from "usehooks-ts";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { signUpSchemaValidation } from "@/schemas/signupSchema";
-import { ApiResponse } from "@/types/apiResponse";
+import { ApiResponse } from "@/types/ApiResponse";
 import {
 	Form,
 	FormControl,
@@ -23,7 +23,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 
-function page() {
+export default function SignUpForm() {
 	const [username, setUsername] = useState("");
 	const [usernameMessage, setUsernameMessage] = useState("");
 	const [isCheckingUsername, setIsCheckingUsername] = useState(false);
@@ -182,4 +182,3 @@ function page() {
 	);
 }
 
-export default page;
