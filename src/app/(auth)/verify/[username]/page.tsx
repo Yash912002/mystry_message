@@ -3,7 +3,7 @@ import * as z from "zod";
 import axios, { AxiosError } from "axios";
 import { useToast } from "@/components/ui/use-toast";
 import { verifySchema } from "@/schemas/verifySchema";
-import { ApiResponse } from "@/types/apiResponse";
+import { ApiResponse } from "@/types/ApiResponse";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
