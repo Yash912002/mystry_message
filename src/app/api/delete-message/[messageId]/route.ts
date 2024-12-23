@@ -3,6 +3,7 @@ import UserModel from "@/model/user.model";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/options";
 import { User } from "next-auth";
+import { NextResponse } from "next/server";
 
 export async function DELETE(
 	request: Request,
@@ -33,7 +34,7 @@ export async function DELETE(
 		);
 
 		if (updateResult.modifiedCount == 0) {
-			return Response.json(
+			return NextResponse.json(
 				{
 					success: false,
 					message: "Message not found or already deleted",
@@ -42,7 +43,7 @@ export async function DELETE(
 			);
 		}
 
-		return Response.json(
+		return NextResponse.json(
 			{
 				success: true,
 				message: "Message deleted successfully",
@@ -51,7 +52,7 @@ export async function DELETE(
 		);
 	} catch (error) {
 		console.log("Error in deleting message ", error);
-		return Response.json(
+		return NextResponse.json(
 			{
 				success: false,
 				message: "Error deleting message",

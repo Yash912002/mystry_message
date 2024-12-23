@@ -2,6 +2,7 @@ import dbConnection from "@/lib/dbConnection";
 import UserModel from "@/model/user.model";
 import { z } from "zod";
 import { userNameValidation } from "@/schemas/signupSchema";
+import { NextResponse } from "next/server";
 
 const usernamequerySchema = z.object({
 	username: userNameValidation,
@@ -25,7 +26,7 @@ export async function GET(request: Request) {
 		if (!result.success) {
 			const usernameErrors = result.error.format().username?._errors || [];
 
-			return Response.json(
+			return NextResponse.json(
 				{
 					success: false,
 					message: "Invalid query parameters",
@@ -42,7 +43,7 @@ export async function GET(request: Request) {
 		});
 
 		if (existingVerifiedUser) {
-			return Response.json(
+			return NextResponse.json(
 				{
 					success: false,
 					message: "Username already exists",
@@ -51,7 +52,7 @@ export async function GET(request: Request) {
 			);
 		}
 
-		return Response.json(
+		return NextResponse.json(
 			{
 				success: true,
 				message: "Username is unique",
@@ -60,7 +61,7 @@ export async function GET(request: Request) {
 		);
 	} catch (error: any) {
 		console.error("Error checking the username", error);
-		return Response.json(
+		return NextResponse.json(
 			{
 				success: false,
 				message: "Error checking the username",

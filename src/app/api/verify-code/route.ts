@@ -1,5 +1,6 @@
 import dbConnection from "@/lib/dbConnection";
 import UserModel from "@/model/user.model";
+import { NextResponse } from "next/server";
 // import { z } from "zod";
 // import { userNameValidation } from "@/schemas/signupSchema";
 
@@ -13,7 +14,7 @@ export async function POST(request: Request) {
 		const user = await UserModel.findOne({ username: decodedUsername });
 
 		if (!user) {
-			return Response.json(
+			return NextResponse.json(
 				{
 					success: false,
 					message: "User not found",
@@ -30,7 +31,7 @@ export async function POST(request: Request) {
 			user.isVerified = true;
 			await user.save();
 
-			return Response.json(
+			return NextResponse.json(
 				{
 					success: true,
 					message: "Account verified",
@@ -38,7 +39,7 @@ export async function POST(request: Request) {
 				{ status: 200 }
 			);
 		} else if (!isCodeNotExpired) {
-			return Response.json(
+			return NextResponse.json(
 				{
 					success: false,
 					message: "Verification Code has expired. Please sign up again",
@@ -46,7 +47,7 @@ export async function POST(request: Request) {
 				{ status: 400 }
 			);
 		} else {
-			return Response.json(
+			return NextResponse.json(
 				{
 					success: false,
 					message: "Incorrect verification code",
@@ -56,7 +57,7 @@ export async function POST(request: Request) {
 		}
 	} catch (error) {
 		console.error("Error verifying User", error);
-		return Response.json(
+		return NextResponse.json(
 			{
 				success: false,
 				message: "Error verifying User",
