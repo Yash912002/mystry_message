@@ -13,12 +13,16 @@ export async function GET(request: Request) {
 	await dbConnection();
 
 	try {
+		// Parse the incoming request URL and extract searchParams.
 		const { searchParams } = new URL(request.url);
 
+		// Retrieve the value of the "username" query parameter 
+		// from searchParams.
 		const queryParams = {
 			username: searchParams.get("username"),
 		};
 
+		// Validate the queryParams object against the usernamequerySchema.
 		const result = usernamequerySchema.safeParse(queryParams);
 
 		// console.log(result);
@@ -35,13 +39,16 @@ export async function GET(request: Request) {
 			);
 		}
 
+		// Extracting the username from the result
 		const { username } = result.data;
 
+		// Check if the username already exists in the database
 		const existingVerifiedUser = await UserModel.findOne({
 			username,
 			isVerified: true,
 		});
 
+		// Return error, if it exists
 		if (existingVerifiedUser) {
 			return NextResponse.json(
 				{
@@ -52,6 +59,7 @@ export async function GET(request: Request) {
 			);
 		}
 
+		//* Return success if username is unique
 		return NextResponse.json(
 			{
 				success: true,

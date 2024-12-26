@@ -9,10 +9,16 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
 	await dbConnection();
 
+	// authOptions tells getServerSession() how to 
+	// properly retrieve, validate, and shape the 
+	// session object based on your app’s authentication setup.
+	// Get the session of currently logged in user. 
 	const session = await getServerSession(authOptions);
 
+	// Extract the session object from the session
 	const user: User = session?.user as User;
 
+	//! Return error if session or session.user doesn't exist
 	if (!session || !session.user) {
 		return NextResponse.json(
 			{
@@ -23,12 +29,14 @@ export async function POST(request: Request) {
 		);
 	}
 
+	// Extract the user id from that user object.
 	const userId = user._id;
-	// const userId = user.id;
 
+	// Get the acceptMessages flag from the request .
 	const { acceptMessages } = await request.json();
 
 	try {
+		// Find the user in the db and return the updated value
 		const updatedUser = await UserModel.findByIdAndUpdate(
 			userId,
 			{
@@ -47,6 +55,7 @@ export async function POST(request: Request) {
 			);
 		}
 
+		//* Return success, if successfully updated the message acceptance status
 		return NextResponse.json(
 			{
 				success: true,

@@ -25,10 +25,14 @@ import { Loader2 } from "lucide-react";
 
 export default function SignUpForm() {
 	const [username, setUsername] = useState("");
+	// It stores message regarding the uniqueness of the username. 
+	// Its value depends on the API response or error
 	const [usernameMessage, setUsernameMessage] = useState("");
 	const [isCheckingUsername, setIsCheckingUsername] = useState(false);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
+	// It ensures setUsername is only called after 500ms delay 
+	// Prevents unnecessary api requests  
 	const debounced = useDebounceCallback(setUsername, 500);
 	const { toast } = useToast();
 	const router = useRouter();
@@ -47,13 +51,14 @@ export default function SignUpForm() {
 		const checkUsernameUnique = async () => {
 			if (username) {
 				setIsCheckingUsername(true);
+				// usernameMessage is cleared to ensure 
+				// no stale messages are displayed.
 				setUsernameMessage("");
 
 				try {
 					const response = await axios.get(
 						`/api/check-username-unique?username=${username}`
 					);
-					// console.log(response);
 					setUsernameMessage(response.data.message);
 				} catch (error) {
 					const axiosError = error as AxiosError<ApiResponse>;
@@ -97,7 +102,7 @@ export default function SignUpForm() {
 			<div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
 				<div className="text-center">
 					<h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
-						Join True Feedback
+						Join Mystery Message
 					</h1>
 					<p className="mb-4">Sign up to start your anonymous adventure</p>
 				</div>

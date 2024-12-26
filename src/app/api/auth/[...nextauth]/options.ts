@@ -9,13 +9,18 @@ export const authOptions: NextAuthOptions = {
 		CredentialsProvider({
 			id: "credentials",
 			name: "Credentials",
+			// Credentials which are required for sign in
 			credentials: {
 				email: { label: "email", type: "text" },
 				password: { label: "Password", type: "password" },
 			},
+
+			// Steps to perform when user tries to sign in
 			async authorize(credentials: any): Promise<any> {
+				// Check if the database is connected or not
 				await dbConnection();
 				try {
+					// Find the user with given username or email
 					const user = await UserModel.findOne({
 						$or: [
 							{ email: credentials.identifier },
@@ -31,11 +36,14 @@ export const authOptions: NextAuthOptions = {
 						throw new Error("Please verify your account first");
 					}
 
+					// Check if the given password matches the password
+					// stored in the database 
 					const isPasswordCorrect = await bcrypt.compare(
 						credentials.password,
 						user.password
 					);
 
+					// If it is correct reuturn the user else throw the error
 					if (isPasswordCorrect) {
 						return user;
 					} else {

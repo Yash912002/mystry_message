@@ -10,9 +10,13 @@ export async function POST(request: Request) {
 	// console.log(content);
 
 	try {
+		// Extrat the username and content from the request 
 	  const { username, content } = await request.json();
+
+		// Find the user by username from the database
 		const user = await UserModel.findOne({ username });
 
+		//! Return error, if user doesn't exist
 		if (!user) {
 			return NextResponse.json(
 				{
@@ -23,6 +27,7 @@ export async function POST(request: Request) {
 			);
 		}
 
+		//! Return error, if user is not accepting messages
 		if (!user.isAcceptingMessage) {
 			return NextResponse.json(
 				{
@@ -33,10 +38,14 @@ export async function POST(request: Request) {
 			);
 		}
 
+		// Create the new message object with content and 
+		// created at field
 		const newMessage = { content, createdAt: new Date() };
 
+		// Push the messages inside user object's message array
 		user.messages.push(newMessage as Message);
 
+		// Save the user
 		await user.save();
 
 		return NextResponse.json(

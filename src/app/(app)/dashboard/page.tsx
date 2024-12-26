@@ -35,8 +35,11 @@ export default function UserDashboard() {
 
 	const { register, setValue, watch } = form;
 
+	// Indicates whether the user is accepting messages. 
+	// Dynamically watched using react-hook-form.
 	const acceptMessages = watch("acceptMessages");
 
+	//* Fetches the current status of whether the user is accepting messages.
 	const fetchAcceptMessage = useCallback(async () => {
 		setIsSwitchLoading(true);
 

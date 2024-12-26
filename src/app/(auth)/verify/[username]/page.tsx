@@ -18,8 +18,12 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 const VerifyAccount = () => {
+	// We can  programmatically change routes inside Client Component
 	const router = useRouter();
+
+	// It lets you read a route's dynamic params i.e. [username]
 	const params = useParams();
+	
 	const { toast } = useToast();
 
 	const form = useForm<z.infer<typeof verifySchema>>({

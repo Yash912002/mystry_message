@@ -9,10 +9,14 @@ import { NextResponse } from "next/server";
 export async function GET(request: Request) {
 	await dbConnection();
 
+	// Retrieves the session object for the authenticated user
 	const session = await getServerSession(authOptions);
 
+	// Session's user object is extracted 
 	const user: User = session?.user as User;
 
+	// It ensures that a valid session and user 
+	// exist before proceeding.
 	if (!session || !session.user) {
 		return NextResponse.json(
 			{
@@ -23,8 +27,12 @@ export async function GET(request: Request) {
 		);
 	}
 
+	// The _id from the session's user object is 
+	// converted into a mongoose.Types.ObjectId
 	const userId = new mongoose.Types.ObjectId(user._id);
 
+	// Aggregation pipeline is used to fetch and 
+	// organize messages for the authenticated user: 
 	try {
 		const userMessages = await UserModel.aggregate([
 			{ $match: { _id: userId } },
@@ -33,6 +41,7 @@ export async function GET(request: Request) {
 			{ $group: { _id: "$_id", messages: { $push: "$messages" } } },
 		]);
 
+		// Return error if messages doesn't exists
     if(!userMessages || userMessages.length === 0) {
       return NextResponse.json(
         {
@@ -43,6 +52,7 @@ export async function GET(request: Request) {
       );
     }
 
+		// Return the messages
     return NextResponse.json(
       {
         success: true,
