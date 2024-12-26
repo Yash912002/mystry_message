@@ -33,6 +33,10 @@ export default function SignInForm() {
 	});
 
 	const onSubmit = async (data: z.infer<typeof signInSchema>) => {
+		// signIn() => Client-side method to initiate a signin flow 
+		// or send the user to the signin page
+
+		// "credentials": It specifies the provider used for login.
 		const result = await signIn("credentials", {
 			redirect: false,
 			identifier: data.identifier,
@@ -56,7 +60,7 @@ export default function SignInForm() {
 			<div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
 				<div className="text-center">
 					<h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
-						Join True Feedback
+						Join Mystery Message
 					</h1>
 					<p className="mb-4">Sign in to start your anonymous adventure</p>
 				</div>
